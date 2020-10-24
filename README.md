@@ -8,13 +8,12 @@ I believe that not only my drive and skillset make me the right candidate for da
 
 Data Scientist | Engineer (Machine Learning, Deep Learning) | Expert (Python, Analytics, Automation, R&D) 
 
-```markdown
 [coursera Specialization Certificates](https://wiqaaas.github.io/specialization_certificates/).
 
 [LinkedIn Profile](https://www.linkedin.com/in/waqas-ahmed-0479731b2?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3Bdamthd2ZT%2BaUKxiHAdfQlg%3D%3D).
 
 [Youtube Channel](https://www.youtube.com/channel/UCRP1OgwMvMS0DdJfSg10W7w).
----
+
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
