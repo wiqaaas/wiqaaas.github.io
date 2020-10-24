@@ -1,8 +1,9 @@
 ## Hi! My name is Waqas. 
 
-My [coursera specialization certificates](https://wiqaaas.github.io/specialization_certificates/) 
-
-to maintain and preview the content for your website in Markdown files.
+My [coursera Specialization Certificates](https://wiqaaas.github.io/specialization_certificates/).
+My [LinkedIn Profile](https://www.linkedin.com/in/waqas-ahmed-0479731b2?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3Bdamthd2ZT%2BaUKxiHAdfQlg%3D%3D).
+My [Youtube Channel](https://www.youtube.com/channel/UCRP1OgwMvMS0DdJfSg10W7w).
+My [Gmail](wiqaaas@gmail.com).
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
