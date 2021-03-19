@@ -1,0 +1,86 @@
+.resume_right_container{
+    height: 100%;
+    width: 80%;    
+    float: right;
+    position: relative;
+    top: 10%;
+}
+
+.resume_right {
+    background: #3B3C36;
+}
+
+.resume_right .lower div{
+    text-align: center;
+    float: left;
+}
+
+.resume_right .lower .languages{
+    width: 100%;
+    height: 100%;
+    color: #C5B358;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    border-bottom: 1px dashed #C5B358;
+}
+
+.resume_right .lower .languages div{
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
+
+.resume_right .lower .BA{
+    width: 100%;
+    height: 100%;
+    color: #D0D3D4;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    border-bottom: 1px dashed #D0D3D4;
+}
+
+.resume_right .lower .BA div{
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
+
+.resume_right .lower .ML{
+    width: 100%;
+    height: 100%;
+    color: #C5B358;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    border-bottom: 1px dashed #C5B358;
+}
+
+.resume_right .lower .ML div{
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
+
+.resume_right .lower .EDA{
+    width: 100%;
+    height: 100%;
+    color: #D0D3D4;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    border-bottom: 1px dashed #D0D3D4;
+}
+
+.resume_right .lower .EDA div{
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
+
+.resume_right .lower .CV_NLP{
+    width: 100%;
+    height: 100%;
+    color: #C5B358;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    border-bottom: 1px dashed #C5B358;
+}
+
+.resume_right .lower .CV_NLP div{
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
