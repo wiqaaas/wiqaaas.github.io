@@ -1,0 +1,54 @@
+.contact_right {
+    width: 75%;
+  height: 100%;
+  background: #C5B358;
+  display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+.contact_right form{
+      display: flex;
+    width: 100%;
+        height: 100%;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+      justify-content: center;
+}
+
+.contact_right form label{
+    font-weight: bold;
+    color: #3B3C36;
+    text-align: center;
+}
+
+.contact_right form .contactform_name{
+    width: 75%;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    padding-bottom: 2.5%;
+}
+
+.contact_right form .contactform_country{
+        width: 75%;
+    display: grid;  
+    grid-template-columns: 15% 85%;
+    padding-bottom: 2.5%;
+
+}
+
+.contact_right form .contactform_message{
+        width: 75%;
+    display: grid;  
+    grid-template-columns: 15% 85%;
+    padding-bottom: 2.5%;
+}
+
+.contact_right form .contactform_submit{
+    width: 75%;
+    display: grid;  
+    padding-left: 25%;
+    padding-right: 25%;
+    grid-template-columns: 100%;
+}
