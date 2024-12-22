@@ -58,7 +58,7 @@
     /* Container => push content below the fixed menu */
     .contentContainer {
       max-width: 800px;
-      margin: 80px auto 0 auto; /* enough top space so content is not under the menu */
+      margin: 80px auto 0 auto;
       padding: 20px;
     }
 
@@ -99,16 +99,16 @@
       word-wrap: break-word;
     }
 
-    /* Prompt => show as bold & green, for emphasis */
+    /* Prompt => bold & green */
     .prompt {
       color: green;
-      font-weight: bold;  /* bold prompt */
+      font-weight: bold;
       display: inline;
     }
 
-    /* Command => color it white, bold for clarity (e.g., ./Skills) */
+    /* Command => bold & white */
     .command {
-      color: #fff;        /* or any color you prefer */
+      color: #fff;
       font-weight: bold;
       display: inline;
     }
@@ -120,7 +120,7 @@
       color: lightgreen;
     }
 
-    /* Arrow lines for "main points" (like job title, key highlight) */
+    /* Arrow lines for "main points" */
     .sectionMainLine {
       position: relative;
       margin-left: 0;
@@ -134,7 +134,32 @@
       color: #0f0; /* bright green arrow */
     }
 
-    /* Sub line (company, date, etc.) => no arrow, slight indentation */
+    /*
+      1) By default, .sectionMainLine => all arrow lines are white,
+         except for:
+         - Publications => .publicationLine
+         - Key Highlights => .keyHighlightLine
+    */
+    .sectionMainLine:not(.publicationLine):not(.keyHighlightLine) {
+      color: #fff;
+    }
+
+    /* For Publications, keep default lightgreen */
+    .publicationLine {
+      color: lightgreen;
+    }
+    
+    /* For Key Highlights, keep default lightgreen */
+    .keyHighlightLine {
+      color: lightgreen;
+    }
+
+    /* The second line (company or university) => also white if .whiteSubLine */
+    .whiteSubLine {
+      color: #fff !important;
+    }
+
+    /* Sub line => slight indentation but default color is lightgreen unless .whiteSubLine */
     .sectionSubLine {
       margin-left: 20px;
       margin-bottom: 5px;
@@ -184,7 +209,7 @@
         padding: 4px 6px;
       }
       .contentContainer {
-        margin-top: 100px; /* for smaller screens, push content down slightly more */
+        margin-top: 100px;
       }
     }
   </style>
@@ -235,11 +260,9 @@
     /********************************************************************
      * Lines array: text content, plus instructions for bold parts, links,
      * icons, and anchor IDs.
-     * 
-     * 1) GitHub & LinkedIn => separate lines.
-     * 2) The prompt is now bold in CSS (.prompt).
-     * 3) Command text is white & bold in CSS (.command).
-     * 4) The menu hides on scroll (above).
+     *
+     * 1) Key Highlights => add .keyHighlightLine => remains lightgreen
+     * 2) Work History & Education => second line => .whiteSubLine => white
      ********************************************************************/
     const lines = [
       // hello-world
@@ -270,26 +293,22 @@
       {
         type: "output",
         content: "3 Master's degrees in Artificial Intelligence, Computer Science, and Mining Engineering.",
-        class: "sectionMainLine",
-        boldParts: ["3 Master's degrees"]
+        class: "sectionMainLine keyHighlightLine"
       },
       {
         type: "output",
         content: "About 5 years of experience as a data scientist, developer, researcher, and trainer.",
-        class: "sectionMainLine",
-        boldParts: ["5 years"]
+        class: "sectionMainLine keyHighlightLine"
       },
       {
         type: "output",
         content: "3 research publications in peer-reviewed journals.",
-        class: "sectionMainLine",
-        boldParts: ["3 research publications"]
+        class: "sectionMainLine keyHighlightLine"
       },
       {
         type: "output",
         content: "50+ Coursera data-related certifications.",
-        class: "sectionMainLine",
-        boldParts: ["50+"]
+        class: "sectionMainLine keyHighlightLine"
       },
       { type: "separator" },
 
@@ -298,8 +317,7 @@
       {
         type: "output",
         content: "Programming",
-        class: "sectionMainLine",
-        boldParts: ["Programming"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -347,8 +365,7 @@
       {
         type: "output",
         content: "Cloud",
-        class: "sectionMainLine",
-        boldParts: ["Cloud"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -372,8 +389,7 @@
       {
         type: "output",
         content: "Machine Learning",
-        class: "sectionMainLine",
-        boldParts: ["Machine Learning"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -410,8 +426,7 @@
       {
         type: "output",
         content: "MLOps",
-        class: "sectionMainLine",
-        boldParts: ["MLOps"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -431,8 +446,7 @@
       {
         type: "output",
         content: "Generative AI",
-        class: "sectionMainLine",
-        boldParts: ["Generative AI"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -442,8 +456,7 @@
       {
         type: "output",
         content: "Other AI interests",
-        class: "sectionMainLine",
-        boldParts: ["Other AI interests"]
+        class: "sectionMainLine"
       },
       {
         type: "output",
@@ -461,9 +474,10 @@
         boldParts: ["AI Developer and Trainer"]
       },
       {
+        // second immediate line => also white
         type: "output",
         content: "WeCloudData – Toronto",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -483,13 +497,14 @@
         boldParts: ["Data Science Trainer"]
       },
       {
+        // second line => also white
         type: "output",
         content: "BloomTech Institute of Technology – USA (Remote)",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
-        content: "Instructed 100's of students in Python programming, statistical analysis, machine learning, SQL, MongoDB, model deployment, computer vision, and natural language processing.",
+        content: "Instructed hundreds of students in Python programming, statistical analysis, machine learning, SQL, MongoDB, model deployment, computer vision, and NLP.",
         class: "bulletLine"
       },
 
@@ -500,9 +515,10 @@
         boldParts: ["Research Assistant"]
       },
       {
+        // second line => white
         type: "output",
         content: "COSMO - STOCHASTIC MINE PLANNING LABORATORY – Montreal",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -527,9 +543,10 @@
         boldParts: ["Data Scientist"]
       },
       {
+        // second line => white
         type: "output",
         content: "Afiniti – Islamabad",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -554,9 +571,10 @@
         boldParts: ["Data Science and BI Expert"]
       },
       {
+        // second line => white
         type: "output",
         content: "MySportsAnalysis Ltd – UK (Remote)",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -565,7 +583,7 @@
       },
       {
         type: "output",
-        content: "Designed and created a Natural Language Generation app that generated analytic pdf reports from CSV files within minutes of game completion, saving 1000's of manual work hours.",
+        content: "Designed and created a Natural Language Generation app that generated analytic pdf reports from CSV files within minutes of game completion, saving thousands of manual work hours.",
         class: "bulletLine"
       },
       {
@@ -581,9 +599,10 @@
         boldParts: ["AI Research Associate"]
       },
       {
+        // second line => white
         type: "output",
         content: "National Center of Artificial Intelligence – Peshawar",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -611,9 +630,10 @@
         boldParts: ["Master of Science: Artificial Intelligence"]
       },
       {
+        // second line => white
         type: "output",
         content: "Memorial University of Newfoundland - Canada",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -633,9 +653,10 @@
         boldParts: ["Master of Science: Computer Science"]
       },
       {
+        // second line => white
         type: "output",
         content: "Virtual University of Pakistan - Pakistan",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -655,9 +676,10 @@
         boldParts: ["Master of Science: Mining Engineering"]
       },
       {
+        // second line => white
         type: "output",
         content: "University of Engineering and Technology, Peshawar - Pakistan",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -677,9 +699,10 @@
         boldParts: ["Bachelors of Science: Mining Engineering"]
       },
       {
+        // second line => white
         type: "output",
         content: "University of Engineering and Technology, Peshawar - Pakistan",
-        class: "sectionSubLine"
+        class: "sectionSubLine whiteSubLine"
       },
       {
         type: "output",
@@ -693,13 +716,12 @@
       },
       { type: "separator" },
 
-      // Publications
+      // Publications => lines get .sectionMainLine + .publicationLine so remain lightgreen
       { type: "command", content: "./Publications", anchorId: "publications" },
       {
         type: "output",
         content: "Novel MLR-RF-Based Geospatial Techniques: A Comparison with OK",
-        class: "sectionMainLine",
-        boldParts: ["Novel MLR-RF-Based Geospatial Techniques"]
+        class: "sectionMainLine publicationLine"
       },
       {
         type: "output",
@@ -712,8 +734,7 @@
       {
         type: "output",
         content: "A simulated annealing based approach for open pit mine production scheduling with stockpiling option",
-        class: "sectionMainLine",
-        boldParts: ["A simulated annealing based approach"]
+        class: "sectionMainLine publicationLine"
       },
       {
         type: "output",
@@ -726,8 +747,7 @@
       {
         type: "output",
         content: "Predicting Calorific Value of Thar Lignite Deposit: A Comparison between Back-propagation Neural Networks (BPNN), Gradient Boosting Trees (GBT), and Multiple Linear Regression (MLR)",
-        class: "sectionMainLine",
-        boldParts: ["Predicting Calorific Value of Thar Lignite"]
+        class: "sectionMainLine publicationLine"
       },
       {
         type: "output",
@@ -740,31 +760,26 @@
       { type: "separator" },
     ];
 
-    // Reference to the terminal
     const terminal = document.getElementById("terminal");
     let lineIndex = 0;
     let charIndex = 0;
 
-    // Type out each character in each line
     function typeCharacter() {
       if (lineIndex < lines.length) {
         const lineData = lines[lineIndex];
-        // either get existing lineEl or create a new one
         const lineEl = document.getElementById(`line${lineIndex}`) ||
                        createLine(lineIndex, lineData.type, lineData.class, lineData.anchorId);
 
-        // If it's a separator line, just show immediately
         if (lineData.type === "separator") {
           lineIndex++;
           setTimeout(typeCharacter, 20);
           return;
         }
 
-        // Type the text char by char
         if (charIndex < lineData.content.length) {
           lineEl.textContent += lineData.content[charIndex];
           charIndex++;
-          setTimeout(typeCharacter, 1); // Typing speed
+          setTimeout(typeCharacter, 1); 
         } else {
           // Done typing => post-processing
           if (lineData.boldParts) boldifyText(lineEl, lineData.boldParts);
@@ -773,7 +788,7 @@
 
           charIndex = 0;
           lineIndex++;
-          setTimeout(typeCharacter, 30); // slight pause before next line
+          setTimeout(typeCharacter, 30);
         }
       }
     }
@@ -781,7 +796,6 @@
     function createLine(index, type, className, anchorId) {
       const lineContainer = document.createElement("div");
 
-      // If it's a separator line
       if (type === "separator") {
         const hr = document.createElement("hr");
         hr.className = "separatorLine";
@@ -791,13 +805,11 @@
         return lineContainer; 
       }
 
-      // If there's an anchorId, set it on the container
       if (anchorId) {
         lineContainer.id = anchorId;
       }
 
       if (type === "command") {
-        // Show the prompt + the typed command
         const prompt = document.createElement("span");
         prompt.className = "prompt";
         prompt.textContent = "ai@waqas:~$ ";
@@ -808,7 +820,6 @@
         command.className = "command";
         lineContainer.appendChild(command);
       } else {
-        // Normal output line
         const output = document.createElement("div");
         output.id = `line${index}`;
         output.className = className ? `output ${className}` : "output";
@@ -819,10 +830,8 @@
       return document.getElementById(`line${index}`);
     }
 
-    // Bolding certain substrings
     function boldifyText(lineEl, boldParts) {
       let finalText = lineEl.textContent;
-      // Replace longer strings first
       boldParts.sort((a, b) => b.length - a.length);
       boldParts.forEach(substr => {
         const escaped = substr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -832,10 +841,8 @@
       lineEl.innerHTML = finalText;
     }
 
-    // Linkify partial substrings
     function linkifyText(lineEl, links) {
       let finalText = lineEl.innerHTML;
-      // Replace longer link text first
       links.sort((a, b) => b.text.length - a.text.length);
       links.forEach(link => {
         const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -846,20 +853,18 @@
       lineEl.innerHTML = finalText;
     }
 
-    // Insert icons
     function iconifyText(lineEl, iconParts) {
       let finalText = lineEl.innerHTML;
       iconParts.sort((a, b) => b.text.length - a.text.length);
       iconParts.forEach(iconItem => {
         const escaped = iconItem.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`\\b${escaped}\\b`, 'g'); // exact match
+        const regex = new RegExp(`\\b${escaped}\\b`, 'g'); 
         const replacement = `<img src="${iconItem.iconURL}" alt="${iconItem.text}" class="icon-image"> ${iconItem.text}`;
         finalText = finalText.replace(regex, replacement);
       });
       lineEl.innerHTML = finalText;
     }
 
-    // Start typing on DOM load
     document.addEventListener("DOMContentLoaded", typeCharacter);
   </script>
 </body>
