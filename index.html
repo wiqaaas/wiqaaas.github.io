@@ -19,19 +19,20 @@
       scroll-behavior: smooth; /* smooth anchor scroll */
       overflow-x: hidden;      /* no horizontal scroll */
     }
+
     /* Typed text color for consistency */
     body {
       color: lightgreen;
     }
 
-    /* Menu Bar (fixed at top, always visible) */
+    /* Menu Bar */
     .menuBar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       min-height: 50px;
-      background-color: rgba(0, 0, 0, 0.8); /* Dark background so content is clearly separated */
+      background-color: rgba(0, 0, 0, 0.8);
       color: white;
       display: flex;
       align-items: center;
@@ -39,6 +40,7 @@
       flex-wrap: wrap;
       z-index: 9999; /* Keep the menu on top of everything else */
       padding: 5px 0;
+      transition: top 0.3s ease; /* transition for hiding on scroll */
     }
     .menuBar a {
       text-decoration: none;
@@ -56,7 +58,7 @@
     /* Container => push content below the fixed menu */
     .contentContainer {
       max-width: 800px;
-      margin: 80px auto 0 auto; /* reduced from 110px */
+      margin: 80px auto 0 auto; /* enough top space so content is not under the menu */
       padding: 20px;
     }
 
@@ -97,13 +99,17 @@
       word-wrap: break-word;
     }
 
-    /* Prompt & command remain green to mimic a real terminal */
+    /* Prompt => show as bold & green, for emphasis */
     .prompt {
       color: green;
+      font-weight: bold;  /* bold prompt */
       display: inline;
     }
+
+    /* Command => color it white, bold for clarity (e.g., ./Skills) */
     .command {
-      color: green;
+      color: #fff;        /* or any color you prefer */
+      font-weight: bold;
       display: inline;
     }
 
@@ -178,7 +184,7 @@
         padding: 4px 6px;
       }
       .contentContainer {
-        margin-top: 100px; /* reduced from 130px */
+        margin-top: 100px; /* for smaller screens, push content down slightly more */
       }
     }
   </style>
@@ -207,11 +213,33 @@
   </div>
 
   <script>
+    /*
+      1) Hide/Show Menu on scroll:
+         - Hide menu on scroll down
+         - Show menu on scroll up
+    */
+    let lastScrollTop = 0;
+    const menuBar = document.getElementById("menuBar");
+    window.addEventListener("scroll", function () {
+      let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScrollTop > lastScrollTop) {
+        // scrolling down => hide menu
+        menuBar.style.top = "-50px";
+      } else {
+        // scrolling up => show menu
+        menuBar.style.top = "0";
+      }
+      lastScrollTop = Math.max(currentScrollTop, 0);
+    });
+
     /********************************************************************
      * Lines array: text content, plus instructions for bold parts, links,
      * icons, and anchor IDs.
-     *
-     * The Hugging Face icon has been removed!
+     * 
+     * 1) GitHub & LinkedIn => separate lines.
+     * 2) The prompt is now bold in CSS (.prompt).
+     * 3) Command text is white & bold in CSS (.command).
+     * 4) The menu hides on scroll (above).
      ********************************************************************/
     const lines = [
       // hello-world
@@ -220,11 +248,18 @@
         type: "output",
         content: "I am Waqas, contact me at Wiqaaas@gmail.com"
       },
+      // separate lines for GitHub & LinkedIn
       {
         type: "output",
-        content: "GitHub: github.com/wiqaaas   |   LinkedIn: linkedin.com/in/wiqaaas",
+        content: "GitHub: github.com/wiqaaas",
         links: [
-          { text: "github.com/wiqaaas", url: "https://github.com/wiqaaas" },
+          { text: "github.com/wiqaaas", url: "https://github.com/wiqaaas" }
+        ]
+      },
+      {
+        type: "output",
+        content: "LinkedIn: linkedin.com/in/wiqaaas",
+        links: [
           { text: "linkedin.com/in/wiqaaas", url: "https://www.linkedin.com/in/wiqaaas/" }
         ]
       },
@@ -342,7 +377,7 @@
       },
       {
         type: "output",
-        content: "Pandas, Numpy, Scikit Learn, Tensorflow, Pytorch, Huggingface, OpenCV, Spacy",
+        content: "Pandas, Numpy, Scikit Learn, Tensorflow, Pytorch, OpenCV, Spacy",
         class: "bulletLine",
         iconParts: [
           {
@@ -714,39 +749,40 @@
     function typeCharacter() {
       if (lineIndex < lines.length) {
         const lineData = lines[lineIndex];
+        // either get existing lineEl or create a new one
         const lineEl = document.getElementById(`line${lineIndex}`) ||
                        createLine(lineIndex, lineData.type, lineData.class, lineData.anchorId);
 
+        // If it's a separator line, just show immediately
         if (lineData.type === "separator") {
-          // Immediately show <hr>, then move on
           lineIndex++;
           setTimeout(typeCharacter, 20);
           return;
         }
 
+        // Type the text char by char
         if (charIndex < lineData.content.length) {
           lineEl.textContent += lineData.content[charIndex];
           charIndex++;
           setTimeout(typeCharacter, 1); // Typing speed
         } else {
-          // Post-processing once line is fully typed
+          // Done typing => post-processing
           if (lineData.boldParts) boldifyText(lineEl, lineData.boldParts);
           if (lineData.links) linkifyText(lineEl, lineData.links);
           if (lineData.iconParts) iconifyText(lineEl, lineData.iconParts);
 
           charIndex = 0;
           lineIndex++;
-          setTimeout(typeCharacter, 30); // Slight pause between lines
+          setTimeout(typeCharacter, 30); // slight pause before next line
         }
       }
     }
 
-    // Create line DOM node
     function createLine(index, type, className, anchorId) {
       const lineContainer = document.createElement("div");
 
+      // If it's a separator line
       if (type === "separator") {
-        // Insert the <hr> line
         const hr = document.createElement("hr");
         hr.className = "separatorLine";
         lineContainer.appendChild(hr);
@@ -755,13 +791,13 @@
         return lineContainer; 
       }
 
+      // If there's an anchorId, set it on the container
       if (anchorId) {
-        // Attach an ID for anchor-based navigation
         lineContainer.id = anchorId;
       }
 
       if (type === "command") {
-        // Show the prompt + typed command
+        // Show the prompt + the typed command
         const prompt = document.createElement("span");
         prompt.className = "prompt";
         prompt.textContent = "ai@waqas:~$ ";
@@ -783,10 +819,10 @@
       return document.getElementById(`line${index}`);
     }
 
-    // Boldify certain substrings
+    // Bolding certain substrings
     function boldifyText(lineEl, boldParts) {
       let finalText = lineEl.textContent;
-      // Replace longer strings first to avoid partial replacements
+      // Replace longer strings first
       boldParts.sort((a, b) => b.length - a.length);
       boldParts.forEach(substr => {
         const escaped = substr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -796,7 +832,7 @@
       lineEl.innerHTML = finalText;
     }
 
-    // Replace partial substrings with anchor links
+    // Linkify partial substrings
     function linkifyText(lineEl, links) {
       let finalText = lineEl.innerHTML;
       // Replace longer link text first
@@ -810,16 +846,13 @@
       lineEl.innerHTML = finalText;
     }
 
-    // Insert icons where specified
+    // Insert icons
     function iconifyText(lineEl, iconParts) {
       let finalText = lineEl.innerHTML;
-      // Replace longer text first
       iconParts.sort((a, b) => b.text.length - a.text.length);
       iconParts.forEach(iconItem => {
         const escaped = iconItem.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        // exact word match
-        const regex = new RegExp(`\\b${escaped}\\b`, 'g');
-        // Insert an <img> plus the text
+        const regex = new RegExp(`\\b${escaped}\\b`, 'g'); // exact match
         const replacement = `<img src="${iconItem.iconURL}" alt="${iconItem.text}" class="icon-image"> ${iconItem.text}`;
         finalText = finalText.replace(regex, replacement);
       });
