@@ -25,7 +25,7 @@
       color: lightgreen;
     }
 
-    /* Menu Bar */
+    /* Menu Bar Container */
     .menuBar {
       position: fixed;
       top: 0;
@@ -36,13 +36,31 @@
       color: white;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: center; /* Center menu items on large screens */
       flex-wrap: wrap;
       z-index: 9999; /* Keep the menu on top of everything else */
       padding: 5px 0;
       transition: top 0.3s ease; /* transition for hiding on scroll */
     }
-    .menuBar a {
+
+    /* Hamburger Icon */
+    .menuToggle {
+      display: none; /* Hidden on larger screens, visible on mobile */
+      cursor: pointer;
+      font-size: 24px;
+      margin-left: 20px;
+      user-select: none;
+    }
+
+    /* The actual nav links container */
+    .menuLinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Helps center the links in larger screens */
+      margin-right: 20px;
+    }
+
+    .menuLinks a {
       text-decoration: none;
       color: white;
       font-size: 16px;
@@ -51,7 +69,7 @@
       border-radius: 5px;
       transition: background-color 0.3s;
     }
-    .menuBar a:hover {
+    .menuLinks a:hover {
       background-color: rgba(255, 255, 255, 0.3);
     }
 
@@ -79,6 +97,13 @@
       background-color: #222;
       border-bottom: 2px solid #333;
       border-radius: 6px 6px 0 0;
+      justify-content: space-between; /* So that PDF buttons can be aligned on the right side */
+    }
+
+    /* Left side (red, yellow, green) circle buttons */
+    .terminal-btns {
+      display: flex;
+      align-items: center;
     }
     .terminal-btn {
       width: 12px;
@@ -89,6 +114,24 @@
     .btn-close { background-color: #ff5f56; }
     .btn-min   { background-color: #ffbd2e; }
     .btn-max   { background-color: #27c93f; }
+
+    /* Right side PDF View/Download buttons */
+    .pdfOptions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .pdfOptions a {
+      color: lightgreen;
+      text-decoration: none;
+      background-color: #333;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: 0.3s background-color;
+    }
+    .pdfOptions a:hover {
+      background-color: #444;
+    }
 
     /* Typed output area */
     .terminal {
@@ -135,12 +178,12 @@
     }
 
     /*
-      1) By default, .sectionMainLine => all arrow lines are white,
-         except for:
-         - Publications => .publicationLine
-         - Key Highlights => .keyHighlightLine
+      1) By default, .sectionMainLine => arrow lines are white unless overwritten
+         - Publications => .publicationLine => lightgreen
+         - Key Highlights => .keyHighlightLine => lightgreen
+         - Certificates => .certificateLine => also lightgreen
     */
-    .sectionMainLine:not(.publicationLine):not(.keyHighlightLine) {
+    .sectionMainLine:not(.publicationLine):not(.keyHighlightLine):not(.certificateLine) {
       color: #fff;
     }
 
@@ -151,6 +194,11 @@
     
     /* For Key Highlights, keep default lightgreen */
     .keyHighlightLine {
+      color: lightgreen;
+    }
+
+    /* For Certificates, also keep them lightgreen */
+    .certificateLine {
       color: lightgreen;
     }
 
@@ -198,16 +246,39 @@
       height: 24px;
     }
 
-    /* Simple media query for smaller screens */
+    /* --- Media Query for Mobile --- */
     @media (max-width: 600px) {
       body {
         font-size: 14px;
       }
-      .menuBar a {
-        font-size: 14px;
-        margin: 3px 6px;
-        padding: 4px 6px;
+
+      /* On mobile, we want space-between so hamburger on the left, links on the right */
+      .menuBar {
+        justify-content: space-between;
       }
+
+      /* Show the hamburger icon, hide the menu links by default */
+      .menuToggle {
+        display: block;
+      }
+
+      .menuLinks {
+        display: none; /* hidden by default on mobile */
+        flex-direction: column;
+        width: 100%;
+        align-items: center; /* center the column items */
+      }
+
+      .menuLinks a {
+        font-size: 14px;
+        margin: 3px 10px;
+      }
+
+      /* When .open class is toggled, show the menu links */
+      .menuLinks.open {
+        display: flex;
+      }
+
       .contentContainer {
         margin-top: 100px;
       }
@@ -218,20 +289,36 @@
 <body>
   <!-- Menu Bar -->
   <div class="menuBar" id="menuBar">
-    <a href="#helloWorld">hello-world</a>
-    <a href="#keyHighlights">Key-Highlights</a>
-    <a href="#skills">Skills</a>
-    <a href="#workHistory">Work History</a>
-    <a href="#education">Education</a>
-    <a href="#publications">Publications</a>
+    <!-- Hamburger Icon (hidden on large screens) -->
+    <div class="menuToggle" onclick="toggleMenu()">☰</div>
+
+    <!-- Nav Links -->
+    <div class="menuLinks" id="menuLinks">
+      <a href="#helloWorld">hello-world</a>
+      <a href="#keyHighlights">Key-Highlights</a>
+      <a href="#skills">Skills</a>
+      <a href="#workHistory">Work History</a>
+      <a href="#education">Education</a>
+      <a href="#publications">Publications</a>
+      <a href="#certificates">Certificates</a>
+    </div>
   </div>
 
   <div class="contentContainer">
     <div class="terminal-window">
       <div class="terminal-bar">
-        <div class="terminal-btn btn-close"></div>
-        <div class="terminal-btn btn-min"></div>
-        <div class="terminal-btn btn-max"></div>
+        <!-- Left side circle buttons -->
+        <div class="terminal-btns">
+          <div class="terminal-btn btn-close"></div>
+          <div class="terminal-btn btn-min"></div>
+          <div class="terminal-btn btn-max"></div>
+        </div>
+
+        <!-- Right side PDF View/Download buttons -->
+        <div class="pdfOptions">
+          <!-- Opens the PDF in a new tab (not forced download) -->
+          <a href="CV/Waqas-CV.pdf" target="_blank">Download</a>
+        </div>
       </div>
       <div id="terminal" class="terminal"></div>
     </div>
@@ -257,12 +344,18 @@
       lastScrollTop = Math.max(currentScrollTop, 0);
     });
 
+    // 2) Toggle the mobile menu (hamburger)
+    function toggleMenu() {
+      const menuLinks = document.getElementById('menuLinks');
+      menuLinks.classList.toggle('open');
+    }
+
     /********************************************************************
-     * Lines array: text content, plus instructions for bold parts, links,
-     * icons, and anchor IDs.
-     *
-     * 1) Key Highlights => add .keyHighlightLine => remains lightgreen
-     * 2) Work History & Education => second line => .whiteSubLine => white
+     * Lines array with:
+     *   - near-instant typing => setTimeout(..., 0)
+     *   - icons in Skills
+     *   - publications with clickable DOIs
+     *   - local PDF paths for certificates/resume
      ********************************************************************/
     const lines = [
       // hello-world
@@ -283,10 +376,10 @@
         type: "output",
         content: "linkedin.com/in/wiqaaas",
         links: [
-          { text: "linkedin.com/in/wiqaaas", url: "https://www.linkedin.com/in/wiqaaas/" }
+          { text: "linkedin.com/in/wiqaaas", url: "https://www.linkedin.com/in/wiqaaas" }
         ]
       },
-      { type: "separator" },
+     { type: "separator" },
 
       // Key-Highlights
       { type: "command", content: "./Key-Highlights", anchorId: "keyHighlights" },
@@ -314,12 +407,14 @@
 
       // Skills
       { type: "command", content: "./Skills", anchorId: "skills" },
+
       {
         type: "output",
         content: "Programming",
         class: "sectionMainLine"
       },
       {
+        // bullet line with icons
         type: "output",
         content: "Python, R, Java, Javascript, Linux, SQL, HTML, CSS, React",
         class: "bulletLine",
@@ -362,6 +457,7 @@
           }
         ]
       },
+
       {
         type: "output",
         content: "Cloud",
@@ -386,6 +482,7 @@
           }
         ]
       },
+
       {
         type: "output",
         content: "Machine Learning",
@@ -405,7 +502,6 @@
             iconURL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg"
           },
           {
-            /* Scikit Learn (Wikipedia Commons) */
             text: "Scikit Learn",
             iconURL: "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg"
           },
@@ -423,6 +519,7 @@
           }
         ]
       },
+
       {
         type: "output",
         content: "MLOps",
@@ -443,6 +540,7 @@
           }
         ]
       },
+
       {
         type: "output",
         content: "Generative AI",
@@ -474,7 +572,6 @@
         boldParts: ["AI Developer and Trainer"]
       },
       {
-        // second immediate line => also white
         type: "output",
         content: "WeCloudData – Toronto",
         class: "sectionSubLine whiteSubLine"
@@ -497,7 +594,6 @@
         boldParts: ["Data Science Trainer"]
       },
       {
-        // second line => also white
         type: "output",
         content: "BloomTech Institute of Technology – USA (Remote)",
         class: "sectionSubLine whiteSubLine"
@@ -515,7 +611,6 @@
         boldParts: ["Research Assistant"]
       },
       {
-        // second line => white
         type: "output",
         content: "COSMO - STOCHASTIC MINE PLANNING LABORATORY – Montreal",
         class: "sectionSubLine whiteSubLine"
@@ -543,7 +638,6 @@
         boldParts: ["Data Scientist"]
       },
       {
-        // second line => white
         type: "output",
         content: "Afiniti – Islamabad",
         class: "sectionSubLine whiteSubLine"
@@ -571,7 +665,6 @@
         boldParts: ["Data Science and BI Expert"]
       },
       {
-        // second line => white
         type: "output",
         content: "MySportsAnalysis Ltd – UK (Remote)",
         class: "sectionSubLine whiteSubLine"
@@ -599,7 +692,6 @@
         boldParts: ["AI Research Associate"]
       },
       {
-        // second line => white
         type: "output",
         content: "National Center of Artificial Intelligence – Peshawar",
         class: "sectionSubLine whiteSubLine"
@@ -630,7 +722,6 @@
         boldParts: ["Master of Science: Artificial Intelligence"]
       },
       {
-        // second line => white
         type: "output",
         content: "Memorial University of Newfoundland - Canada",
         class: "sectionSubLine whiteSubLine"
@@ -653,7 +744,6 @@
         boldParts: ["Master of Science: Computer Science"]
       },
       {
-        // second line => white
         type: "output",
         content: "Virtual University of Pakistan - Pakistan",
         class: "sectionSubLine whiteSubLine"
@@ -676,7 +766,6 @@
         boldParts: ["Master of Science: Mining Engineering"]
       },
       {
-        // second line => white
         type: "output",
         content: "University of Engineering and Technology, Peshawar - Pakistan",
         class: "sectionSubLine whiteSubLine"
@@ -699,7 +788,6 @@
         boldParts: ["Bachelors of Science: Mining Engineering"]
       },
       {
-        // second line => white
         type: "output",
         content: "University of Engineering and Technology, Peshawar - Pakistan",
         class: "sectionSubLine whiteSubLine"
@@ -716,7 +804,7 @@
       },
       { type: "separator" },
 
-      // Publications => lines get .sectionMainLine + .publicationLine so remain lightgreen
+      // Publications (with clickable DOIs)
       { type: "command", content: "./Publications", anchorId: "publications" },
       {
         type: "output",
@@ -758,8 +846,505 @@
         class: "bulletLine"
       },
       { type: "separator" },
+
+      // Certificates => .certificateLine to ensure specialization names are green, no links on them
+      { type: "command", content: "./Certificates", anchorId: "certificates" },
+
+      // 1) IBM Data Science Professional Certificate (9 courses)
+      {
+        type: "output",
+        content: "IBM Data Science Professional Certificate (9 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Applied_Data_Science_Capstone.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Applied_Data_Science_Capstone.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Applied_Data_Science_Capstone.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Data_Analysis_With_Python.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Data_Analysis_With_Python.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Data_Analysis_With_Python.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Data_Science_Methodology.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Data_Science_Methodology.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Data_Science_Methodology.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Data_Visualization_With_Python.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Data_Visualization_With_Python.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Data_Visualization_With_Python.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Databases_and_SQL_For_Data_Science.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Databases_and_SQL_For_Data_Science.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Databases_and_SQL_For_Data_Science.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Machine_Learning_with_Python.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Machine_Learning_with_Python.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Machine_Learning_with_Python.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Python_For_Data_Science_and_AI.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Python_For_Data_Science_and_AI.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Python_For_Data_Science_and_AI.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Tools_For_Data_Science.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Tools_For_Data_Science.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/Tools_For_Data_Science.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "What_is_Data_Science.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "What_is_Data_Science.pdf",
+            url: "Coursera_Certificates-master/IBM_Data_Science_Professional_Certificate/What_is_Data_Science.pdf"
+          }
+        ]
+      },
+
+      // 2) Deep Learning Specialization (5 courses)
+      {
+        type: "output",
+        content: "Deep Learning Specialization (5 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Convolutional_Neural_Networks.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Convolutional_Neural_Networks.pdf",
+            url: "Coursera_Certificates-master/Deep_Learning_Specialization/Convolutional_Neural_Networks.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Improving_Deep_Neural_Networks.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Improving_Deep_Neural_Networks.pdf",
+            url: "Coursera_Certificates-master/Deep_Learning_Specialization/Improving_Deep_Neural_Networks.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Neural_Networks_and_Deep_Learning.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Neural_Networks_and_Deep_Learning.pdf",
+            url: "Coursera_Certificates-master/Deep_Learning_Specialization/Neural_Networks_and_Deep_Learning.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Sequence_Models.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Sequence_Models.pdf",
+            url: "Coursera_Certificates-master/Deep_Learning_Specialization/Sequence_Models.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Structuring_Machine_Learning_Projects.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Structuring_Machine_Learning_Projects.pdf",
+            url: "Coursera_Certificates-master/Deep_Learning_Specialization/Structuring_Machine_Learning_Projects.pdf"
+          }
+        ]
+      },
+
+      // 3) Google IT Automation With Python Professional Certificate (5 courses)
+      {
+        type: "output",
+        content: "Google IT Automation With Python Professional Certificate (5 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Configuration_Management_and_Cloud.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Configuration_Management_and_Cloud.pdf",
+            url: "Coursera_Certificates-master/Google_IT_Automation_With_Python_Professional_Certificate/Configuration_Management_and_Cloud.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Crash_Course_on_Python.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Crash_Course_on_Python.pdf",
+            url: "Coursera_Certificates-master/Google_IT_Automation_With_Python_Professional_Certificate/Crash_Course_on_Python.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Introduction_to_Git_and_Github.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Introduction_to_Git_and_Github.pdf",
+            url: "Coursera_Certificates-master/Google_IT_Automation_With_Python_Professional_Certificate/Introduction_to_Git_and_Github.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Python_Interaction_with_Operating_System.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Python_Interaction_with_Operating_System.pdf",
+            url: "Coursera_Certificates-master/Google_IT_Automation_With_Python_Professional_Certificate/Python_Interaction_with_Operating_System.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Troubleshooting_And_Debugging_Techniques.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Troubleshooting_And_Debugging_Techniques.pdf",
+            url: "Coursera_Certificates-master/Google_IT_Automation_With_Python_Professional_Certificate/Troubleshooting_And_Debugging_Techniques.pdf"
+          }
+        ]
+      },
+
+      // 4) TensorFlow in Practice Specialization (4 courses)
+      {
+        type: "output",
+        content: "TensorFlow in Practice Specialization (4 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Convolutional_Neural_Networks_in_Tensorflow.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Convolutional_Neural_Networks_in_Tensorflow.pdf",
+            url: "Coursera_Certificates-master/Tensorflow_in_Practise_Specialization/Convolutional_Neural_Networks_in_Tensorflow.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Introduction_to_Tensorflow.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Introduction_to_Tensorflow.pdf",
+            url: "Coursera_Certificates-master/Tensorflow_in_Practise_Specialization/Introduction_to_Tensorflow.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Natural_Language_Processing_in_Tensorflow.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Natural_Language_Processing_in_Tensorflow.pdf",
+            url: "Coursera_Certificates-master/Tensorflow_in_Practise_Specialization/Natural_Language_Processing_in_Tensorflow.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Sequence_Time_Series_and_Prediction.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Sequence_Time_Series_and_Prediction.pdf",
+            url: "Coursera_Certificates-master/Tensorflow_in_Practise_Specialization/Sequence_Time_Series_and_Prediction.pdf"
+          }
+        ]
+      },
+
+      // 5) Python For Everybody Specialization (4 courses)
+      {
+        type: "output",
+        content: "Python For Everybody Specialization (4 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Capstone_Retrieving_Processing_Visualizing_with_Python.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Capstone_Retrieving_Processing_Visualizing_with_Python.pdf",
+            url: "Coursera_Certificates-master/Python_For_Everybody_Specialization/Capstone_Retrieving_Processing_Visualizing_with_Python.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Programming_for_everybody_(Getting_Started).pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Programming_for_everybody_(Getting_Started).pdf",
+            url: "Coursera_Certificates-master/Python_For_Everybody_Specialization/Programming_for_everybody_(Getting_Started).pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Python_Data_Structures.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Python_Data_Structures.pdf",
+            url: "Coursera_Certificates-master/Python_For_Everybody_Specialization/Python_Data_Structures.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Using_Python_To_Access_Web_Data.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Using_Python_To_Access_Web_Data.pdf",
+            url: "Coursera_Certificates-master/Python_For_Everybody_Specialization/Using_Python_To_Access_Web_Data.pdf"
+          }
+        ]
+      },
+
+      // 6) IBM Applied AI Professional Certificate (6 courses)
+      {
+        type: "output",
+        content: "IBM Applied AI Professional Certificate (6 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "AI_Powered_Chatbots_with_IBM_Watson.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "AI_Powered_Chatbots_with_IBM_Watson.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/AI_Powered_Chatbots_with_IBM_Watson.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Building_AI_Applications_with_Watson_API.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Building_AI_Applications_with_Watson_API.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/Building_AI_Applications_with_Watson_API.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Computer_Vision_with_Watson_and_OpenCV.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Computer_Vision_with_Watson_and_OpenCV.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/Computer_Vision_with_Watson_and_OpenCV.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Getting_Started_with_AI_using_IBM_Watson.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Getting_Started_with_AI_using_IBM_Watson.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/Getting_Started_with_AI_using_IBM_Watson.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Introduction_to_AI.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Introduction_to_AI.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/Introduction_to_AI.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Python_For_Data_Science_and_AI.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Python_For_Data_Science_and_AI.pdf",
+            url: "Coursera_Certificates-master/IBM_Applied_AI_Professional_Certificate/Python_For_Data_Science_and_AI.pdf"
+          }
+        ]
+      },
+
+      // 7) Machine Learning Specialization (3 courses)
+      {
+        type: "output",
+        content: "Machine Learning Specialization (3 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Machine_Learning_Classification.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Machine_Learning_Classification.pdf",
+            url: "Coursera_Certificates-master/Machine_Learning_Specialization/Machine_Learning_Classification.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Machine_Learning_Foundations.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Machine_Learning_Foundations.pdf",
+            url: "Coursera_Certificates-master/Machine_Learning_Specialization/Machine_Learning_Foundations.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "Machine_Learning_Regression.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Machine_Learning_Regression.pdf",
+            url: "Coursera_Certificates-master/Machine_Learning_Specialization/Machine_Learning_Regression.pdf"
+          }
+        ]
+      },
+
+      // 8) AI For Medicine Specialization (2 courses)
+      {
+        type: "output",
+        content: "AI For Medicine Specialization (2 courses)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "AI_for_Medical_Diagnosis.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "AI_for_Medical_Diagnosis.pdf",
+            url: "Coursera_Certificates-master/AI_For_Medicine_Specialization/AI_for_Medical_Diagnosis.pdf"
+          }
+        ]
+      },
+      {
+        type: "output",
+        content: "AI_for_Medical_Prognosis.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "AI_for_Medical_Prognosis.pdf",
+            url: "Coursera_Certificates-master/AI_For_Medicine_Specialization/AI_for_Medical_Prognosis.pdf"
+          }
+        ]
+      },
+
+      // 9) Mathematics For Machine Learning Specialization (1 course)
+      {
+        type: "output",
+        content: "Mathematics For Machine Learning Specialization (1 course)",
+        class: "sectionMainLine certificateLine"
+      },
+      {
+        type: "output",
+        content: "Linear_Algebra.pdf",
+        class: "bulletLine",
+        links: [
+          {
+            text: "Linear_Algebra.pdf",
+            url: "Coursera_Certificates-master/Mathematics_For_Machine_Learning_Specialization/Linear_Algebra.pdf"
+          }
+        ]
+      },
+      { type: "separator" },
     ];
 
+    // Make typing near-instant => setTimeout(..., 0)
     const terminal = document.getElementById("terminal");
     let lineIndex = 0;
     let charIndex = 0;
@@ -767,19 +1352,22 @@
     function typeCharacter() {
       if (lineIndex < lines.length) {
         const lineData = lines[lineIndex];
-        const lineEl = document.getElementById(`line${lineIndex}`) ||
-                       createLine(lineIndex, lineData.type, lineData.class, lineData.anchorId);
+        const lineEl =
+          document.getElementById(`line${lineIndex}`) ||
+          createLine(lineIndex, lineData.type, lineData.class, lineData.anchorId);
 
         if (lineData.type === "separator") {
           lineIndex++;
-          setTimeout(typeCharacter, 20);
+          // Immediately proceed (no delay)
+          setTimeout(typeCharacter, 0);
           return;
         }
 
         if (charIndex < lineData.content.length) {
           lineEl.textContent += lineData.content[charIndex];
           charIndex++;
-          setTimeout(typeCharacter, 1); 
+          // Speed => near instant
+          setTimeout(typeCharacter, 0); 
         } else {
           // Done typing => post-processing
           if (lineData.boldParts) boldifyText(lineEl, lineData.boldParts);
@@ -788,7 +1376,8 @@
 
           charIndex = 0;
           lineIndex++;
-          setTimeout(typeCharacter, 30);
+          // Speed => near instant
+          setTimeout(typeCharacter, 0);
         }
       }
     }
@@ -832,6 +1421,7 @@
 
     function boldifyText(lineEl, boldParts) {
       let finalText = lineEl.textContent;
+      // Sort substrings by length descending so longer ones replace first
       boldParts.sort((a, b) => b.length - a.length);
       boldParts.forEach(substr => {
         const escaped = substr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -843,6 +1433,7 @@
 
     function linkifyText(lineEl, links) {
       let finalText = lineEl.innerHTML;
+      // Sort link texts by length descending so longer ones replace first
       links.sort((a, b) => b.text.length - a.text.length);
       links.forEach(link => {
         const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -855,6 +1446,7 @@
 
     function iconifyText(lineEl, iconParts) {
       let finalText = lineEl.innerHTML;
+      // Sort by text length descending so bigger matches are replaced first
       iconParts.sort((a, b) => b.text.length - a.text.length);
       iconParts.forEach(iconItem => {
         const escaped = iconItem.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -865,6 +1457,7 @@
       lineEl.innerHTML = finalText;
     }
 
+    // Start typing effect once DOM loads
     document.addEventListener("DOMContentLoaded", typeCharacter);
   </script>
 </body>
